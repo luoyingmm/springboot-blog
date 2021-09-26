@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luoyingmm.dao.mapper.ArticleMapper;
 import com.luoyingmm.dao.pojo.Article;
 import com.luoyingmm.service.ArticleService;
+import com.luoyingmm.service.SysUserService;
+import com.luoyingmm.service.TagService;
 import com.luoyingmm.vo.ArticleVo;
 import com.luoyingmm.vo.Result;
 import com.luoyingmm.vo.params.PageParams;
@@ -22,6 +24,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private SysUserService sysUserService;
     @Override
     public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
@@ -30,21 +36,28 @@ public class ArticleServiceImpl implements ArticleService {
         Page<Article> articlePage = articleMapper.selectPage(page, articleLambdaQueryWrapper);
         List<Article> records = articlePage.getRecords();
 
-        List<ArticleVo> articleVoList = copyList(records);
+        List<ArticleVo> articleVoList = copyList(records,true,true);
         return Result.success(articleVoList);
     }
 
-    private List<ArticleVo> copyList(List<Article> records) {
+    private List<ArticleVo> copyList(List<Article> records,boolean isTag,boolean isAuthor) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         for (Article record : records) {
-            articleVoList.add(copy(record));
+            articleVoList.add(copy(record,isTag,isAuthor));
         }
         return articleVoList;
     }
-    private ArticleVo copy(Article article){
+    private ArticleVo copy(Article article,boolean isTag,boolean isAuthor){
         ArticleVo articleVo = new ArticleVo();
         BeanUtils.copyProperties(article,articleVo);
         articleVo.setCreateDate(new DateTime(article.getCreateDate()).toString("yyyy-MM-dd HH:mm"));
+        if (isTag){
+            articleVo.setTags(tagService.findTagByArticleId(article.getId()));
+        }
+        if (isAuthor){
+            Long authorId = article.getAuthorId();
+            articleVo.setAuthor(sysUserService.findUserById(authorId).getNickname());
+        }
         return articleVo;
     }
 }

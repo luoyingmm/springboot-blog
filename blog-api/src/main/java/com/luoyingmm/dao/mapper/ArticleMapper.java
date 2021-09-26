@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 
-@Mapper
+@Repository
 public interface ArticleMapper extends BaseMapper<Article> {
 
 }
