@@ -2,6 +2,7 @@ package com.luoyingmm.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.luoyingmm.dao.dos.Archives;
 import com.luoyingmm.dao.mapper.ArticleMapper;
 import com.luoyingmm.dao.pojo.Article;
 import com.luoyingmm.service.ArticleService;
@@ -38,6 +39,26 @@ public class ArticleServiceImpl implements ArticleService {
 
         List<ArticleVo> articleVoList = copyList(records,true,true);
         return Result.success(articleVoList);
+    }
+
+    @Override
+    public Result hotArticle(int limit) {
+        LambdaQueryWrapper<Article> last = new LambdaQueryWrapper<Article>().orderByDesc(Article::getViewCounts).select(Article::getId, Article::getTitle).last("limit " + limit);
+        List<Article> articles = articleMapper.selectList(last);
+        return Result.success(copyList(articles,false,false));
+    }
+
+    @Override
+    public Result newArticles(int limit) {
+        LambdaQueryWrapper<Article> last = new LambdaQueryWrapper<Article>().orderByDesc(Article::getCreateDate).select(Article::getId, Article::getTitle).last("limit " + limit);
+        List<Article> articles = articleMapper.selectList(last);
+        return Result.success(copyList(articles,false,false));
+    }
+
+    @Override
+    public Result listArchives() {
+        List<Archives> articles = articleMapper.listArchives();
+        return Result.success(articles);
     }
 
     private List<ArticleVo> copyList(List<Article> records,boolean isTag,boolean isAuthor) {
