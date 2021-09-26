@@ -11,20 +11,20 @@ import com.luoyingmm.vo.params.PageParams;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
-    ArticleMapper articleMapper;
+    private ArticleMapper articleMapper;
     @Override
     public Result listArticle(PageParams pageParams) {
-        Page<Article> page = new Page<>(pageParams.getSize(), pageParams.getPageSize());
+        Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<Article>().orderByDesc(Article::getWeight, Article::getCreateDate);
 
         Page<Article> articlePage = articleMapper.selectPage(page, articleLambdaQueryWrapper);

@@ -2,6 +2,7 @@ package com.luoyingmm.service;
 
 import com.luoyingmm.vo.Result;
 import com.luoyingmm.vo.params.PageParams;
+import org.springframework.context.annotation.ComponentScan;
 
 public interface ArticleService {
     /**
