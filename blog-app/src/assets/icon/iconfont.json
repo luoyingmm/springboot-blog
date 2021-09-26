@@ -1,0 +1,23 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1000860",
+      "name": "qq",
+      "font_class": "qq",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "13553421",
+      "name": "bilibili-fill",
+      "font_class": "bilibili-fill",
+      "unicode": "eea8",
+      "unicode_decimal": 61096
+    }
+  ]
+}
