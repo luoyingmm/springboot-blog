@@ -9,5 +9,14 @@
         where id in
         (select tag_id from ms_article_tag where article_id=#{articleId})
     </select>
+    <select id="findHotsTagIds" resultType="java.lang.Long" parameterType="int">
+        select tag_id from ms_article_tag group by tag_id order by count(*) desc limit #{limit}
+    </select>
+    <select id="findTagByTagIds" resultType="com.luoyingmm.dao.pojo.Tag" parameterType="list">
+        select id,tag_name as tagName from ms_tag where id in
+        <foreach collection="tagIds" item="tagId" separator="," open="(" close=")">
+            #{tagId}
+        </foreach>
+    </select>
 
 </mapper>

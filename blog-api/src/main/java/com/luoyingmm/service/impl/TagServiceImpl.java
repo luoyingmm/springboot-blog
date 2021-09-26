@@ -3,13 +3,17 @@ package com.luoyingmm.service.impl;
 import com.luoyingmm.dao.mapper.TagMapper;
 import com.luoyingmm.dao.pojo.Tag;
 import com.luoyingmm.service.TagService;
+import com.luoyingmm.vo.Result;
 import com.luoyingmm.vo.TagVo;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -20,6 +24,16 @@ public class TagServiceImpl implements TagService {
     public List<TagVo> findTagByArticleId(Long articleId) {
         List<Tag> tags = tagMapper.findTagByArticleId(articleId);
         return copyList(tags);
+    }
+
+    @Override
+    public Result hots(int limit) {
+        List<Long> tagIds = tagMapper.findHotsTagIds(limit);
+        if (CollectionUtils.isEmpty(tagIds)){
+            return Result.success(Collections.emptyList());
+        }
+        List<Tag> tagList = tagMapper.findTagByTagIds(tagIds);
+        return Result.success(tagList);
     }
 
     public List<TagVo> copyList(List<Tag> tagList){
