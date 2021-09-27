@@ -1,5 +1,6 @@
 package com.luoyingmm.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.luoyingmm.dao.mapper.SysUserMapper;
 import com.luoyingmm.dao.pojo.SysUser;
 import com.luoyingmm.service.SysUserService;
@@ -17,6 +18,16 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser = new SysUser();
             sysUser.setNickname("落樱");
         }
+        return sysUser;
+    }
+
+    @Override
+    public SysUser findUser(String account, String password) {
+        SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>().eq(SysUser::getAccount, account)
+                .eq(SysUser::getPassword,password)
+                .select(SysUser::getAccount,SysUser::getId,SysUser::getAvatar,SysUser::getNickname)
+                .last("limit 1"));
+
         return sysUser;
     }
 }
