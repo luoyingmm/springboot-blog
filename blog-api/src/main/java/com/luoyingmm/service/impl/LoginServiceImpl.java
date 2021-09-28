@@ -41,7 +41,7 @@ public class LoginServiceImpl implements LoginService {
         }
         String token = JWTUtils.createToken(sysUser.getId());
 
-        redisTemplate.opsForValue().set("token_" + token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("TOKEN_" + token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
 
         return Result.success(token);
     }
