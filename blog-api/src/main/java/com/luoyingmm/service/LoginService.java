@@ -1,8 +1,11 @@
 package com.luoyingmm.service;
 
+import com.luoyingmm.dao.pojo.SysUser;
 import com.luoyingmm.vo.Result;
 import com.luoyingmm.vo.params.LoginParam;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface LoginService {
 
     /**
@@ -11,4 +14,6 @@ public interface LoginService {
      * @return
      */
     Result login(LoginParam loginParam);
+
+    SysUser checkToken(String token);
 }
