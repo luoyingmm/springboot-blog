@@ -3,6 +3,7 @@ package com.luoyingmm.handler;
 import com.alibaba.fastjson.JSON;
 import com.luoyingmm.dao.pojo.SysUser;
 import com.luoyingmm.service.LoginService;
+import com.luoyingmm.utils.UserThreadLocal;
 import com.luoyingmm.vo.ErrorCode;
 import com.luoyingmm.vo.Result;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,12 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
-
+        UserThreadLocal.put(sysUser);
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        UserThreadLocal.remove();
     }
 }

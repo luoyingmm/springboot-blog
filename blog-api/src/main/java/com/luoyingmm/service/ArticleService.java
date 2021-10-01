@@ -33,4 +33,6 @@ public interface ArticleService {
      * @return
      */
     Result listArchives();
+
+    Result findArticleById(Long articleId);
 }
