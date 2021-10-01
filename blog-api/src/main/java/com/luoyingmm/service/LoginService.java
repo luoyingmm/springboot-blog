@@ -5,7 +5,7 @@ import com.luoyingmm.vo.Result;
 import com.luoyingmm.vo.params.LoginParam;
 import org.springframework.stereotype.Repository;
 
-@Repository
+
 public interface LoginService {
 
     /**
