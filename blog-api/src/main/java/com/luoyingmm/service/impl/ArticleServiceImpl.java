@@ -7,10 +7,7 @@ import com.luoyingmm.dao.mapper.ArticleBodyMapper;
 import com.luoyingmm.dao.mapper.ArticleMapper;
 import com.luoyingmm.dao.pojo.Article;
 import com.luoyingmm.dao.pojo.ArticleBody;
-import com.luoyingmm.service.ArticleService;
-import com.luoyingmm.service.CategoryService;
-import com.luoyingmm.service.SysUserService;
-import com.luoyingmm.service.TagService;
+import com.luoyingmm.service.*;
 import com.luoyingmm.vo.ArticleBodyVo;
 import com.luoyingmm.vo.ArticleVo;
 import com.luoyingmm.vo.Result;
@@ -67,10 +64,14 @@ public class ArticleServiceImpl implements ArticleService {
         return Result.success(articles);
     }
 
+    @Autowired
+    private ThreadService threadService;
+
     @Override
     public Result findArticleById(Long articleId) {
         Article article = articleMapper.selectById(articleId);
         ArticleVo articleVo = copy(article, true, true,true,true);
+        threadService.updateArticleViewCount(articleMapper,article);
         return Result.success(articleVo);
     }
 

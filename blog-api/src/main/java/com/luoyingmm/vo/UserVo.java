@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 @Data
-public class LoginUserVo {
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
-
-    private String account;
+public class UserVo {
 
     private String nickname;
 
     private String avatar;
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
 }

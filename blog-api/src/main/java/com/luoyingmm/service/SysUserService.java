@@ -2,11 +2,15 @@ package com.luoyingmm.service;
 
 import com.luoyingmm.dao.pojo.SysUser;
 import com.luoyingmm.vo.Result;
+import com.luoyingmm.vo.UserVo;
 import org.springframework.stereotype.Repository;
 
 
 public interface SysUserService {
-    SysUser findUserById(long id);
+
+    UserVo findUserVoById(Long id);
+
+    SysUser findUserById(Long id);
 
     SysUser findUser(String account, String password);
 
