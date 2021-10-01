@@ -8,4 +8,5 @@ import javax.sql.rowset.serial.SerialStruct;
 public class LoginParam {
     private String account;
     private String password;
+    private String nickname;
 }
