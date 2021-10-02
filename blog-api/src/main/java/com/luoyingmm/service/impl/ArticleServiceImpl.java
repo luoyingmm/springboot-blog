@@ -5,12 +5,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.luoyingmm.dao.dos.Archives;
 import com.luoyingmm.dao.mapper.ArticleBodyMapper;
 import com.luoyingmm.dao.mapper.ArticleMapper;
+import com.luoyingmm.dao.mapper.ArticleTagMapper;
 import com.luoyingmm.dao.pojo.Article;
 import com.luoyingmm.dao.pojo.ArticleBody;
+import com.luoyingmm.dao.pojo.ArticleTag;
+import com.luoyingmm.dao.pojo.SysUser;
 import com.luoyingmm.service.*;
+import com.luoyingmm.utils.UserThreadLocal;
 import com.luoyingmm.vo.ArticleBodyVo;
 import com.luoyingmm.vo.ArticleVo;
 import com.luoyingmm.vo.Result;
+import com.luoyingmm.vo.TagVo;
+import com.luoyingmm.vo.params.ArticleParam;
 import com.luoyingmm.vo.params.PageParams;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -32,10 +39,16 @@ public class ArticleServiceImpl implements ArticleService {
     private SysUserService sysUserService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
     @Override
     public Result listArticle(PageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
-        LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<Article>().orderByDesc(Article::getWeight, Article::getCreateDate);
+        LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<Article>();
+        if (pageParams.getCategoryId() != null){
+            articleLambdaQueryWrapper.eq(Article::getCategoryId,pageParams.getCategoryId());
+        }
+        articleLambdaQueryWrapper.orderByDesc(Article::getWeight, Article::getCreateDate);
 
         Page<Article> articlePage = articleMapper.selectPage(page, articleLambdaQueryWrapper);
         List<Article> records = articlePage.getRecords();
@@ -73,6 +86,43 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleVo articleVo = copy(article, true, true,true,true);
         threadService.updateArticleViewCount(articleMapper,article);
         return Result.success(articleVo);
+    }
+
+    @Override
+    public Result publish(ArticleParam articleParam) {
+        SysUser sysUser = UserThreadLocal.get();
+
+        Article article = new Article();
+        article.setAuthorId(sysUser.getId());
+        article.setWeight(Article.Article_Common);
+        article.setViewCounts(0);
+        article.setTitle(articleParam.getTitle());
+        article.setSummary(articleParam.getSummary());
+        article.setCommentCounts(0);
+        article.setCreateDate(System.currentTimeMillis());
+        article.setCategoryId(articleParam.getCategory().getId());
+        this.articleMapper.insert(article);
+        List<TagVo> tags = articleParam.getTags();
+        if (tags != null){
+            for (TagVo tag : tags) {
+                Long articleId = article.getId();
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setTagId(tag.getId());
+                articleTag.setArticleId(articleId);
+                articleTagMapper.insert(articleTag);
+            }
+        }
+
+        ArticleBody articleBody = new ArticleBody();
+        articleBody.setArticleId(article.getId());
+        articleBody.setContent(articleParam.getBody().getContent());
+        articleBody.setContentHtml(articleParam.getBody().getContentHtml());
+        articleBodyMapper.insert(articleBody);
+        article.setBodyId(articleBody.getId());
+        articleMapper.updateById(article);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id",article.getId().toString());
+        return Result.success(map);
     }
 
     private List<ArticleVo> copyList(List<Article> records,boolean isTag,boolean isAuthor) {

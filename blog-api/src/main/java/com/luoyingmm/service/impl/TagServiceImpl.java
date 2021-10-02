@@ -1,5 +1,6 @@
 package com.luoyingmm.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.luoyingmm.dao.mapper.TagMapper;
 import com.luoyingmm.dao.pojo.Tag;
 import com.luoyingmm.service.TagService;
@@ -36,6 +37,20 @@ public class TagServiceImpl implements TagService {
         return Result.success(tagList);
     }
 
+    @Override
+    public Result findAll() {
+        List<Tag> tagList = tagMapper.selectList(new LambdaQueryWrapper<Tag>().select(Tag::getId,Tag::getTagName));
+
+        return Result.success(copyList(tagList));
+    }
+
+    @Override
+    public Result findAllDetail() {
+        List<Tag> tagList = tagMapper.selectList(new LambdaQueryWrapper<Tag>());
+
+        return Result.success(copyList(tagList));
+    }
+
     public List<TagVo> copyList(List<Tag> tagList){
         List<TagVo> tagVos = new ArrayList<>();
         for (Tag tag : tagList) {
@@ -49,6 +64,4 @@ public class TagServiceImpl implements TagService {
         BeanUtils.copyProperties(tag,tagVo);
         return tagVo;
     }
-
-
 }

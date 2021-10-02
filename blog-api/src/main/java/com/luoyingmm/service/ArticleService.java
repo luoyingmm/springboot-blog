@@ -1,6 +1,7 @@
 package com.luoyingmm.service;
 
 import com.luoyingmm.vo.Result;
+import com.luoyingmm.vo.params.ArticleParam;
 import com.luoyingmm.vo.params.PageParams;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
@@ -35,4 +36,6 @@ public interface ArticleService {
     Result listArchives();
 
     Result findArticleById(Long articleId);
+
+    Result publish(ArticleParam articleParam);
 }

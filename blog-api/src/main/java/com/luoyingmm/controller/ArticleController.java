@@ -1,7 +1,9 @@
 package com.luoyingmm.controller;
 
+import com.luoyingmm.common.aop.LogAnnotation;
 import com.luoyingmm.service.ArticleService;
 import com.luoyingmm.vo.Result;
+import com.luoyingmm.vo.params.ArticleParam;
 import com.luoyingmm.vo.params.PageParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping
+    @LogAnnotation(module="文章",operator="获取文章列表")
     public Result listArticle(@RequestBody PageParams pageParams){
          return articleService.listArticle(pageParams);
     }
@@ -55,5 +58,10 @@ public class ArticleController {
     @PostMapping("view/{id}")
     public Result findArticleById(@PathVariable("id") Long articleId){
         return articleService.findArticleById(articleId);
+    }
+
+    @PostMapping("publish")
+    public Result publish(@RequestBody ArticleParam articleParam){
+        return articleService.publish(articleParam);
     }
 }
