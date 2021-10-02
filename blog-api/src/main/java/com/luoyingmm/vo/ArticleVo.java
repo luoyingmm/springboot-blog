@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 public class ArticleVo {
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+//    @JsonSerialize(using = ToStringSerializer.class)
+    private String id;
 
     private String title;
 

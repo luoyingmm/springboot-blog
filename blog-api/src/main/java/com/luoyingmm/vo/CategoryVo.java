@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class CategoryVo {
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
+    private String id;
 
     private String avatar;
 
