@@ -77,6 +77,7 @@ public class ArticleServiceImpl implements ArticleService {
         Page<Article> page = new Page<>(pageParams.getPage(), pageParams.getPageSize());
         IPage<Article> articleIPage = articleMapper.listArticle(page, pageParams.getCategoryId(), pageParams.getTagId(), pageParams.getYear(), pageParams.getMonth());
         List<Article> records = articleIPage.getRecords();
+        System.out.println("===========================" + records);
         return Result.success(copyList(records,true,true));
     }
 

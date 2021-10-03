@@ -54,6 +54,7 @@ public class CommentsServiceImpl implements CommentsService {
         comment.setParentId(parent == null ? 0 : parent);
         Long toUserId = commentParam.getToUserId();
         comment.setToUid(toUserId == null ? 0 : toUserId);
+        System.out.println("=========================================" + comment);
         this.commentMapper.insert(comment);
         return Result.success(null);
     }
