@@ -44,14 +44,16 @@
                                     <span style="display:block;">修改密码</span>
                                 </el-dropdown-item>
                                 <el-dropdown-item divided>
-                                        <a href="/admin/logout"><span style="display:block;">退出</span></a>
+                                        <a href="/logout"><span style="display:block;">退出</span></a>
                                     </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </div>
                 </nav>
             </el-header>
+
             <el-container>
+
                 <el-aside width="200px">
                     <el-menu>
                         <el-submenu v-for="menu in menuList" :index="menu.path">
@@ -67,10 +69,13 @@
                         </el-submenu>
                     </el-menu>
                 </el-aside>
+
                 <el-container>
                     <iframe name="right" class="el-main" src="permission.html" width="100%" height="800px" frameborder="0"></iframe>
                 </el-container>
+
             </el-container>
+
         </el-container>
     </div>
 </body>
@@ -82,13 +87,15 @@
 <script>
     new Vue({
         el: '#app',
-        method:{
-
+        methods:{
+            getUserInfo(){
+                axios.post("/admin/user/userInfo").then((res)=>{
+                    this.username = res.data;
+                })
+            }
         },
-        created:function () {
-            axios.post("/admin/user/userInfo").then((res)=>{
-                this.username = res.data;
-            })
+        created() {
+            this.getUserInfo();
         },
         data:{
             username:"",
