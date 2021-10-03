@@ -24,7 +24,7 @@
     },
     computed: {
       title (){
-        return '留言板 - 码神之路'
+        return '留言板'
       }
     }
   }

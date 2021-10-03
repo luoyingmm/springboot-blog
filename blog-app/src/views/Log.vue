@@ -44,7 +44,7 @@
     },
     computed: {
       title (){
-        return '日志 - 码神之路'
+        return '日志 - Esurey'
       }
     }
   }
