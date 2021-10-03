@@ -18,13 +18,11 @@
 ## 项目运行
 
 前端(blog-app)：
-
 - npm install（下载依赖）
 - npm run build (打包)
 - npm run dev (运行)
 
 后端(blog-api)：
-
 * 先创建一个mysql数据库，之后运行blog.sql文件
 * 修改application.properties数据库配置
 * 启动Redis
